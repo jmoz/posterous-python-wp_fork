@@ -24,6 +24,7 @@ def bind_method(**options):
         payload_list = options.get('payload_list', False)
         response_type = options.get('response_type', 'xml')
         allowed_param = options.get('allowed_param', [])
+        url_param = options.get('url_param', [])
         method = options.get('method', 'GET')
         require_auth = options.get('require_auth', False)
 
@@ -37,6 +38,7 @@ def bind_method(**options):
             self.headers = kwargs.pop('headers', {})
             self.api_url = api.host + api.api_root
             self._build_parameters(args, kwargs)
+            self._build_url_parameters(args, kwargs)
 
         def _build_parameters(self, args, kwargs):
             self.parameters = []
@@ -90,6 +92,36 @@ def bind_method(**options):
 
             self.parameters.append((name, enc_utf8_str(value)))
 
+        
+        def _build_url_parameters(self, args, kwargs):
+			args = list(args)
+			args.reverse()
+			
+			for name, p_type in self.url_param:
+				value = None
+				if args:
+					value = args.pop()
+					
+				if name in kwargs:
+					if not value:
+						value = kwargs.pop(name)
+					else:
+						raise TypeError('Multiple values for parameter %s supplied!' % name)
+				if not value:
+					continue
+					
+				if not isinstance(p_type, tuple):
+					p_type = (p_type,)
+					
+				self._check_type(value, p_type, name)
+				self._set_url_param(name, value)            
+
+        def _set_url_param(self, name, value):
+	        url_path = self.path
+	        url_path = url_path.replace('/'+name, '/'+str(value))
+	        self.path = url_path
+
+
         def execute(self):
             # Build request URL
             url = self.api_url + '/' + self.path
@@ -105,7 +137,7 @@ def bind_method(**options):
                 post_data = urllib.urlencode(self.parameters)
             elif self.method == 'GET' and self.parameters:
                 url = '%s?%s' % (url, urllib.urlencode(self.parameters))
-            
+
             # Make the request
             try:
                 request = urllib2.Request(url, post_data, self.headers)

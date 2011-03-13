@@ -1,3 +1,15 @@
+# posterous-python export to WordPress fork
+includes...
+
+## Posterous to WordPress WXR format export script
+In the scripts directory, you'll find p2wp.py, which will export a Posterous site to a WordPress WXR format file. You'll still need to install the posterous-python API (see below) to make this work.
+
+## Additional API calls
+...including some [Posterous API V2](http://apidocs.posterous.com) calls, to support the p2wp script. 
+
+This is my first Python work of any note, so the coding could be a bit ropey.
+
+
 # What is posterous-python?
 It's a simple to use Python library for the [Posterous API](http://posterous.com/api). 
 It covers the entire API and it's really easy to extend when new API methods are added!
@@ -50,6 +62,7 @@ That's it! Now fire up the posterous-shell to start playing with the library.
     post.new_comment("This is a really interesting post.")
    
 Until there is full documentation coverage, you can take a look at api.py for the available methods and their arguments. The model objects also have methods that allow you to quickly perform actions (i.e. post.new_comment() instead of api.read_posts()[0].new_comment()), so look at models.py for those.
+
 
 ##In the future...
 Expect to see these new features:

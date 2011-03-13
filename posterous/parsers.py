@@ -10,7 +10,8 @@
 import xml.etree.cElementTree as ET
 
 from posterous.models import ModelFactory, attribute_map
-from posterous.utils import import_simplejson
+#from posterous.utils import import_simplejson
+import json
 from posterous.error import PosterousError
 
 
@@ -159,6 +160,15 @@ class XMLParser(object):
         return output
 
 
+class JSONParser(object):
+    def __init__(self):
+        pass
+
+    def parse(self, method, payload):
+	    output = json.loads(payload)
+	    return output
+
+
 class ModelParser(object):
     """Used for parsing a method response into a model object."""
 
@@ -180,6 +190,9 @@ class ModelParser(object):
         if method.response_type == 'xml':
             xml_parser = XMLParser()
             data = xml_parser.parse(method, payload)
+        elif method.response_type == 'json':
+	        json_parser = JSONParser()
+	        data = json_parser.parse(method, payload)
         else:
             raise NotImplementedError
 

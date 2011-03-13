@@ -45,6 +45,18 @@ class API(object):
         'require_auth'  - True if the API method requires authentication.
     """
     
+    
+    ## API token
+    """Returns the API token for the user"""
+    get_api_token = bind_method(
+        path = '2/auth/token',
+        payload_type = 'apitoken',
+        allowed_param = [],
+        response_type = 'json',
+        require_auth = True
+    )
+    
+    
     ## Reading 
     """
     Returns a list of all sites owned and authored by the 
@@ -76,6 +88,21 @@ class API(object):
         require_auth = False
     )
 
+    read_posts_v2 = bind_method(
+        path = '2/users/me/sites/primary/posts',
+        payload_type = 'postv2',
+        payload_list = True,
+        response_type = 'json',
+        allowed_param = [
+            ('page', int),
+            ('since_id', int),
+            ('tag', basestring),
+            ('api_token', basestring)],
+        require_auth = False
+    )
+
+
+
     """
     Returns a post by interacting with the Post.ly API. 
     The id param must be in Post.ly shortcode. 
@@ -87,6 +114,15 @@ class API(object):
         payload_type = 'post',
         allowed_param = [('id', basestring)],
         require_auth = False
+    )
+
+    get_post_v2 = bind_method(
+        path = '2/users/me/sites/primary/posts/id',
+        payload_type = 'postv2',
+        response_type = 'json',
+        url_param = [('id', int)],
+        allowed_param = [('api_token', basestring)],
+        require_auth = False        
     )
         
     """
@@ -104,6 +140,23 @@ class API(object):
             ('hostname', basestring)],
         require_auth = False
     )
+
+    """
+    Returns a list of all comments for a post. Authentication is
+    optional.
+    Uses Posterous API version 2.
+    """
+
+    get_comments_v2 = bind_method(
+        path = '2/users/me/sites/primary/posts/id/responses',
+        payload_type = 'commentv2',
+        payload_list = True,
+        response_type = 'json',
+        url_param = [('id', int)],
+        allowed_param = [('api_token', basestring)],
+        require_auth = True        
+    )
+
 
     ## Posting
     """
