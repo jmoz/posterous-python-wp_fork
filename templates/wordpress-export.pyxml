@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rss version="2.0"
+	xmlns:excerpt="http://wordpress.org/export/1.0/excerpt/"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:wp="http://wordpress.org/export/1.0/"
+>
+
+<channel>
+	<title>${blog_title}</title>
+	<pubDate>${now}</pubDate>
+	<generator>posterous-2-wp-v0.1</generator>
+	<language>${language}</language>
+	<wp:wxr_version>1.0</wp:wxr_version>
+	
+	<?py for tag in tags: ?>
+	<wp:tag><wp:tag_slug>${tag}</wp:tag_slug><wp:tag_name><![CDATA[${tag}]]></wp:tag_name></wp:tag>
+	<?py #endfor ?>
+	
+	<?py i = 0 ?>
+	<?py for post in posts: ?>
+	<?py     i += 1 ?>
+	<item>
+		<title>${post.title}</title>
+		<link>${post.full_url}</link>
+		<pubDate>${post.display_date}</pubDate>
+		<dc:creator><![CDATA[${post.user['firstname']} ${post.user['lastname']}]]></dc:creator>
+		<category><![CDATA[Post]]></category>
+		<category domain="category" nicename="post"><![CDATA[Post]]></category>
+		
+		<?py for tag in post.tags: ?>
+		<category domain="tag"><![CDATA[${tag.name}]]></category>
+		<category domain="tag" nicename="${tag.name}"><![CDATA[${tag.name}]]></category>
+		<?py #endfor ?>
+
+		<guid isPermaLink="false">${post.full_url}</guid>
+		<description></description>
+		<content:encoded><![CDATA[#{post.body_full}]]></content:encoded>
+		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+		<wp:post_id>${post.id}</wp:post_id>
+		<wp:post_date>${post.date}</wp:post_date>
+		<wp:comment_status>open</wp:comment_status>
+		<wp:ping_status>open</wp:ping_status>
+		<wp:post_name></wp:post_name>
+		<wp:status>publish</wp:status>
+		<wp:post_parent>0</wp:post_parent>
+		<wp:menu_order>0</wp:menu_order>
+		<wp:post_type>post</wp:post_type>
+		<wp:post_password></wp:post_password>
+		<wp:is_sticky>0</wp:is_sticky>
+		<?py y = 0 ?>
+		<?py for comment in post.comments: ?>
+		<?py     y += 1 ?>
+		<wp:comment>
+		<wp:comment_id>#{y}</wp:comment_id>
+		<wp:comment_author><![CDATA[${comment.name}]]></wp:comment_author>
+		<wp:comment_date>${comment.created_at}</wp:comment_date>
+		<wp:comment_date_gmt>2010-02-23 22:50:34</wp:comment_date_gmt>
+		<wp:comment_content><![CDATA[${comment.body}]]></wp:comment_content>
+		<wp:comment_approved>1</wp:comment_approved>
+		</wp:comment>
+		<?py #endfor ?>
+	</item>
+
+	<?py #endfor ?>
+	
+	<?py for post in posts: ?>
+	<?py imageCount = 0 ?>
+	<?py for image in post.images: ?>
+	<?py imageCount = imageCount + 1 
+	imageUrlName = image.full['caption'].replace(' ','') + "-image-" + str(imageCount)
+	?>
+		<item>
+			<title>${imageUrlName}-full</title>
+			<link>${image.full['url']}</link>
+			<pubDate>${post.display_date}</pubDate>
+			<dc:creator><![CDATA[${image.full['username']}]]></dc:creator>
+			<category><![CDATA[Image]]></category>
+			<category domain="category" nicename="image"><![CDATA[Image]]></category>
+			<guid isPermaLink="false">${image.full['url']}</guid>
+			<description/>
+			<content:encoded><![CDATA[]]></content:encoded>
+			<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+			<wp:post_date>${post.date}</wp:post_date>
+			<wp:post_date_gmt>${post.date}</wp:post_date_gmt>
+			<wp:comment_status>open</wp:comment_status>
+			<wp:ping_status>open</wp:ping_status>
+			<wp:post_name>${imageUrlName}</wp:post_name>
+			<wp:status>inherit</wp:status>
+			<wp:post_parent>${image.full['post_id']}</wp:post_parent>
+			<wp:menu_order>0</wp:menu_order>
+			<wp:post_type>attachment</wp:post_type>
+			<wp:post_password/>
+			<wp:is_sticky>0</wp:is_sticky>
+			<wp:attachment_url>${image.full['url']}</wp:attachment_url>
+			<wp:postmeta>
+				<wp:meta_key>_wp_attached_file</wp:meta_key>
+				<wp:meta_value>${image.full['url']}</wp:meta_value>
+			</wp:postmeta>
+			<wp:postmeta>
+				<wp:meta_key>_wp_attachment_image_alt</wp:meta_key>
+				<wp:meta_value>${image.full['caption']}</wp:meta_value>
+			</wp:postmeta>
+	</item>
+
+	<?py if hasattr(image, 'scaled500'):?>
+	<item>
+			<title>${imageUrlName}-scaled500</title>
+			<link>${image.scaled500['url']}</link>
+			<pubDate>${post.display_date}</pubDate>
+			<dc:creator><![CDATA[${image.scaled500['username']}]]></dc:creator>
+			<category><![CDATA[Image]]></category>
+			<category domain="category" nicename="image"><![CDATA[Image]]></category>
+			<guid isPermaLink="false">${image.scaled500['url']}</guid>
+			<description/>
+			<content:encoded><![CDATA[]]></content:encoded>
+			<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+			<wp:post_date>${post.date}</wp:post_date>
+			<wp:post_date_gmt>${post.date}</wp:post_date_gmt>
+			<wp:comment_status>open</wp:comment_status>
+			<wp:ping_status>open</wp:ping_status>
+			<wp:post_name>${imageUrlName}</wp:post_name>
+			<wp:status>inherit</wp:status>
+			<wp:post_parent>${image.scaled500['post_id']}</wp:post_parent>
+			<wp:menu_order>0</wp:menu_order>
+			<wp:post_type>attachment</wp:post_type>
+			<wp:post_password/>
+			<wp:is_sticky>0</wp:is_sticky>
+			<wp:attachment_url>${image.scaled500['url']}</wp:attachment_url>
+			<wp:postmeta>
+				<wp:meta_key>_wp_attached_file</wp:meta_key>
+				<wp:meta_value>${image.scaled500['url']}</wp:meta_value>
+			</wp:postmeta>
+			
+			<wp:postmeta>
+				<wp:meta_key>_wp_attachment_image_alt</wp:meta_key>
+				<wp:meta_value>${image.scaled500['caption']}</wp:meta_value>
+			</wp:postmeta>
+	</item>
+	<?py #endif?>
+	
+	<?py if hasattr(image, 'scaled1000'):?>
+	<item>
+			<title>${imageUrlName}-scaled1000</title>
+			<link>${image.scaled1000['url']}</link>
+			<pubDate>${post.display_date}</pubDate>
+			<dc:creator><![CDATA[${image.scaled1000['username']}]]></dc:creator>
+			<category><![CDATA[Image]]></category>
+			<category domain="category" nicename="image"><![CDATA[Image]]></category>
+			<guid isPermaLink="false">${image.scaled1000['url']}</guid>
+			<description/>
+			<content:encoded><![CDATA[]]></content:encoded>
+			<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+			<wp:post_date>${post.date}</wp:post_date>
+			<wp:post_date_gmt>${post.date}</wp:post_date_gmt>
+			<wp:comment_status>open</wp:comment_status>
+			<wp:ping_status>open</wp:ping_status>
+			<wp:post_name>${imageUrlName}</wp:post_name>
+			<wp:status>inherit</wp:status>
+			<wp:post_parent>${image.scaled1000['post_id']}</wp:post_parent>
+			<wp:menu_order>0</wp:menu_order>
+			<wp:post_type>attachment</wp:post_type>
+			<wp:post_password/>
+			<wp:is_sticky>0</wp:is_sticky>
+			<wp:attachment_url>${image.scaled1000['url']}</wp:attachment_url>
+			<wp:postmeta>
+				<wp:meta_key>_wp_attached_file</wp:meta_key>
+				<wp:meta_value>${image.scaled1000['url']}</wp:meta_value>
+			</wp:postmeta>
+			
+			<wp:postmeta>
+				<wp:meta_key>_wp_attachment_image_alt</wp:meta_key>
+				<wp:meta_value>${image.scaled1000['caption']}</wp:meta_value>
+			</wp:postmeta>
+	</item>
+	<?py #endif?>
+	
+ 	<?py #endfor?>
+	<?py #endfor?>
+	
+	<?py for post in posts: ?>
+	<?py audio_file_count = 0 ?>
+	<?py for audio_file in post.audio_files: ?>
+	<?py audio_file_count = audio_file_count + 1 
+	audioFileUrlName = post.title.replace(' ','') + "-audiofile-" + str(audio_file_count)
+	?>
+		<item>
+			<title>${audioFileUrlName}</title>
+			<link>${audio_file.url}</link>
+			<pubDate>${post.display_date}</pubDate>
+			<dc:creator><![CDATA[${post.user['firstname']} ${post.user['lastname']}]]></dc:creator>
+			<category><![CDATA[Audio]]></category>
+			<category domain="category" nicename="audio"><![CDATA[Audio]]></category>
+			<guid isPermaLink="false">${audio_file.url}</guid>
+			<description/>
+			<content:encoded><![CDATA[]]></content:encoded>
+			<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+			<wp:post_date>${post.date}</wp:post_date>
+			<wp:post_date_gmt>${post.date}</wp:post_date_gmt>
+			<wp:comment_status>open</wp:comment_status>
+			<wp:ping_status>open</wp:ping_status>
+			<wp:post_name>${audioFileUrlName}</wp:post_name>
+			<wp:status>inherit</wp:status>
+			<wp:post_parent>${post.id}</wp:post_parent>
+			<wp:menu_order>0</wp:menu_order>
+			<wp:post_type>attachment</wp:post_type>
+			<wp:post_password/>
+			<wp:is_sticky>0</wp:is_sticky>
+			<wp:attachment_url>${audio_file.url}</wp:attachment_url>
+			<wp:postmeta>
+				<wp:meta_key>_wp_attached_file</wp:meta_key>
+				<wp:meta_value>${audio_file.url}</wp:meta_value>
+			</wp:postmeta>
+	</item>
+
+	<?py #endfor?>
+	<?py #endfor?>
+	
+	
+	<?py for post in posts: ?>
+	<?py video_file_count = 0 ?>
+	<?py for video_file in post.videos: ?>
+	<?py video_file_count = video_file_count + 1 
+	videoFileUrlName = post.title.replace(' ','') + "-videofile-" + str(video_file_count)
+	?>
+		<item>
+			<title>${videoFileUrlName}</title>
+			<link>${video_file.url}</link>
+			<pubDate>${post.display_date}</pubDate>
+			<dc:creator><![CDATA[${post.user['firstname']} ${post.user['lastname']}]]></dc:creator>
+			<category><![CDATA[Video]]></category>
+			<category domain="category" nicename="video"><![CDATA[Video]]></category>
+			<guid isPermaLink="false">${video_file.url}</guid>
+			<description/>
+			<content:encoded><![CDATA[]]></content:encoded>
+			<excerpt:encoded><![CDATA[]]></excerpt:encoded>
+			<wp:post_date>${post.date}</wp:post_date>
+			<wp:post_date_gmt>${post.date}</wp:post_date_gmt>
+			<wp:comment_status>open</wp:comment_status>
+			<wp:ping_status>open</wp:ping_status>
+			<wp:post_name>${videoFileUrlName}</wp:post_name>
+			<wp:status>inherit</wp:status>
+			<wp:post_parent>${post.id}</wp:post_parent>
+			<wp:menu_order>0</wp:menu_order>
+			<wp:post_type>attachment</wp:post_type>
+			<wp:post_password/>
+			<wp:is_sticky>0</wp:is_sticky>
+			<wp:attachment_url>${video_file.url}</wp:attachment_url>
+			<wp:postmeta>
+				<wp:meta_key>_wp_attached_file</wp:meta_key>
+				<wp:meta_value>${video_file.url}</wp:meta_value>
+			</wp:postmeta>
+	</item>
+
+	<?py #endfor?>
+	<?py #endfor?>
+	
+	
+	
+</channel>
