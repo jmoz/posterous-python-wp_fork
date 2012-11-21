@@ -59,6 +59,40 @@ class API(object):
     
     ## Reading 
     """
+    Retrieve a site's posts
+    """
+    retrieve_posts = bind_method(
+        path = '2/sites/site_id/posts',
+        payload_type = 'postv2',
+        payload_list = True,
+        response_type = 'json',
+        url_param = [('site_id', int)],
+        allowed_param = [
+            ('page', int),
+            ('since_id', int),
+            ('tag', basestring),
+            ('api_token', basestring)],
+        require_auth = True
+    )
+    
+    """
+    Retrieve a site's public posts
+    """
+    retrieve_public_posts = bind_method(
+        path = '2/sites/site_id/posts/public',
+        payload_type = 'postv2',
+        payload_list = True,
+        response_type = 'json',
+        url_param = [('site_id', int)],
+        allowed_param = [
+            ('page', int),
+            ('since_id', int),
+            ('tag', basestring),
+            ('api_token', basestring)],
+        require_auth = False
+    )
+    
+    """
     Returns a list of all sites owned and authored by the 
     authenticated user.
     """
